@@ -1,6 +1,7 @@
 import os
 import ipaddress
 import math
+import matplotlib
 
 def ClearConsole():
     os.system('cls')
@@ -31,6 +32,11 @@ def CalculateSubnetMasks(ip, cidr, hostsPerSubnet):
         else:
             subnetMasks.append(ipaddress.IPv4Network(f'{subnetMasks[i-1].broadcast_address + 1}/{32 - math.ceil(math.log2((hostsPerSubnet[i])))}', strict=False))   # Calculates the subnet mask for the given IP, CIDR, and hosts per subnet
     return subnetMasks
+
+def VisualizeSubnets(subnets):
+    fig, ax = plt.subplots()
+    ax.scatter(subnets, subnets, c='r', s=10)
+    ax.set(xlabel='Subnet', ylabel='Subnet', title='Subnets')  
 
 def Main():
     ClearConsole()
