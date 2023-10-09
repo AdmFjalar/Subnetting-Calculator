@@ -7,29 +7,31 @@ def ClearConsole():
     os.system('cls')
 
 def CalculateMaxSubnets(ip, cidr):
-    try:
-        ipaddress.IPv4Network(f'{ip}/{cidr}', strict=False)   # Creates the base network from the given IP and CIDR notation (only used to check for invalid IP address or CIDR notation)
-    except (ipaddress.AddressValueError, ipaddress.NetmaskValueError):      # If the IP address or CIDR notation is invalid, print error message and return
-        print("Invalid IP address or CIDR notation.")
-        return 0
-
-    maxSubnets = 2 ** (32 - cidr)                                           # Calculates the maximum number of subnets for the given IP and CIDR notation
-    return maxSubnets                                                       # Returns the maximum number of subnets for the given IP and CIDR notation
+    maxSubnets = 0
+    if (ValidateIPAndCIDR(ip, cidr)):
+        maxSubnets = 2 ** (32 - cidr)                                           # Calculates the maximum number of subnets for the given IP and CIDR notation
+    return maxSubnets
 
 def CalculateSubnetMasks(ip, cidr, hostsPerSubnet):
-    try:                                                                    # Tries to create the base network from the given IP and CIDR notation
-        ipaddress.IPv4Network(f'{ip}/{cidr}', strict=False)   # Creates the base network object
-    except (ipaddress.AddressValueError, ipaddress.NetmaskValueError):      # If the IP address or CIDR notation is invalid, print error message and return
-        print("Invalid IP address or CIDR notation.")
-        return []
-
     subnetMasks = []
-    for i in range(len(hostsPerSubnet)):                                                                                                                            # Loops through the number of hosts per subnet
-        if i == 0:
-            subnetMasks.append(ipaddress.IPv4Network(f'{ip}/{32 - math.ceil(math.log2((hostsPerSubnet[i])))}', strict=False))                                       # Calculates the subnet mask for the given IP, CIDR, and hosts per subnet (first subnet)
-        else:
-            subnetMasks.append(ipaddress.IPv4Network(f'{subnetMasks[i-1].broadcast_address + 1}/{32 - math.ceil(math.log2((hostsPerSubnet[i])))}', strict=False))   # Calculates the subnet mask for the given IP, CIDR, and hosts per subnet
+    if (ValidateIPAndCIDR(ip, cidr)):
+        for i in range(len(hostsPerSubnet)):                                                                                                                            # Loops through the number of hosts per subnet
+            if i == 0:
+                subnetMasks.append(ipaddress.IPv4Network(f'{ip}/{CIDRFromHosts(hostsPerSubnet[i])}', strict=False))                                       # Calculates the subnet mask for the given IP, CIDR, and hosts per subnet (first subnet)
+            else:
+                subnetMasks.append(ipaddress.IPv4Network(f'{subnetMasks[i-1].broadcast_address + 1}/{CIDRFromHosts(hostsPerSubnet[i])}', strict=False))   # Calculates the subnet mask for the given IP, CIDR, and hosts per subnet
     return subnetMasks
+
+def CIDRFromHosts(hosts):
+    return 32 - math.ceil(math.log2(hosts))
+
+def ValidateIPAndCIDR(ip, cidr):
+    try:
+        ipaddress.IPv4Network(f'{ip}/{cidr}', strict=False)                 # Creates a network from the given IP and CIDR notation (only used to check for invalid IP address or CIDR notation)
+    except (ipaddress.AddressValueError, ipaddress.NetmaskValueError):      # If the IP address or CIDR notation is invalid, print error message and return
+        print("Invalid IP address or CIDR notation.\n")
+        return False
+    return True
 
 def VisualizeSubnets(baseNetwork, subnets):
     fig, ax = plt.subplots()
@@ -37,13 +39,14 @@ def VisualizeSubnets(baseNetwork, subnets):
 
 def Main():
     ClearConsole()
-    try:                # Gets user input and tries to convert to int
-        ip = input("Enter the base IP address: ")
-        cidr = int(input("Enter the CIDR notation (e.g., 24): "))
-    except ValueError:  # If input cannot be converted to int, print error message and return
-        print("Invalid input data type.")
-        return
-
+    while True:
+        try:                # Gets user input and tries to convert to int
+            ip = input("Enter the base IP address: ")
+            cidr = int(input("Enter the CIDR notation (e.g., 24): "))
+        except ValueError:  # If input cannot be converted to int, print error message and return
+            print("Invalid input data type.")
+        if ValidateIPAndCIDR(ip, cidr):
+            break
     print("\n")
 
     maxSubnets = CalculateMaxSubnets(ip, cidr)                      # Calculates the maximum number of subnets for the given IP and CIDR
