@@ -1,7 +1,8 @@
 import os
 import ipaddress
 import math
-import matplotlib
+import matplotlib.pyplot as plt
+import random
 
 def ClearConsole():
     os.system('cls')
@@ -33,14 +34,12 @@ def CalculateSubnetMasks(ip, cidr, hostsPerSubnet):
             subnetMasks.append(ipaddress.IPv4Network(f'{subnetMasks[i-1].broadcast_address + 1}/{32 - math.ceil(math.log2((hostsPerSubnet[i])))}', strict=False))   # Calculates the subnet mask for the given IP, CIDR, and hosts per subnet
     return subnetMasks
 
-def VisualizeSubnets(subnets):
+def VisualizeSubnets(baseNetwork, subnets):
     fig, ax = plt.subplots()
-    ax.scatter(subnets, subnets, c='r', s=10)
-    ax.set(xlabel='Subnet', ylabel='Subnet', title='Subnets')  
+    plt.show()
 
 def Main():
     ClearConsole()
-
     try:                # Gets user input and tries to convert to int
         ip = input("Enter the base IP address: ")
         cidr = int(input("Enter the CIDR notation (e.g., 24): "))
@@ -78,6 +77,7 @@ def Main():
     subnetMasks = CalculateSubnetMasks(ip, cidr, hostsPerSubnet)    # Calculates the subnet masks for the given IP, CIDR, and hosts per subnet
 
     if subnetMasks:                                                 # If subnetMasks is not empty, print the subnet details
+        VisualizeSubnets(ipaddress.IPv4Network(f'{ip}/{cidr}', strict=False), subnetMasks)
         print("\nCalculated Subnet Details:")
         for index, subnet in enumerate(subnetMasks, start=1):
             print(f"Subnet {index}:\t{subnet.network_address}/{subnet.prefixlen}")
@@ -85,5 +85,4 @@ def Main():
             print(f"\tNetwork Address:\t{subnet.network_address}")
             print(f"\tBroadcast Address:\t{subnet.broadcast_address}")
             print(f"\tHost Range:\t\t{subnet.network_address + 1} - {subnet.broadcast_address - 1}\n")
-
 Main()  # Calls the main function
