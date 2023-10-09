@@ -2,14 +2,13 @@ import os
 import ipaddress
 import math
 import matplotlib.pyplot as plt
-import random
 
 def ClearConsole():
     os.system('cls')
 
 def CalculateMaxSubnets(ip, cidr):
     try:
-        baseNetwork = ipaddress.IPv4Network(f'{ip}/{cidr}', strict=False)   # Creates the base network from the given IP and CIDR notation (only used to check for invalid IP address or CIDR notation)
+        ipaddress.IPv4Network(f'{ip}/{cidr}', strict=False)   # Creates the base network from the given IP and CIDR notation (only used to check for invalid IP address or CIDR notation)
     except (ipaddress.AddressValueError, ipaddress.NetmaskValueError):      # If the IP address or CIDR notation is invalid, print error message and return
         print("Invalid IP address or CIDR notation.")
         return 0
@@ -19,12 +18,10 @@ def CalculateMaxSubnets(ip, cidr):
 
 def CalculateSubnetMasks(ip, cidr, hostsPerSubnet):
     try:                                                                    # Tries to create the base network from the given IP and CIDR notation
-        baseNetwork = ipaddress.IPv4Network(f'{ip}/{cidr}', strict=False)   # Creates the base network object
+        ipaddress.IPv4Network(f'{ip}/{cidr}', strict=False)   # Creates the base network object
     except (ipaddress.AddressValueError, ipaddress.NetmaskValueError):      # If the IP address or CIDR notation is invalid, print error message and return
         print("Invalid IP address or CIDR notation.")
         return []
-
-    maxSubnets = CalculateMaxSubnets(ip, cidr)                              # Calculates the maximum number of subnets for the given IP and CIDR notation
 
     subnetMasks = []
     for i in range(len(hostsPerSubnet)):                                                                                                                            # Loops through the number of hosts per subnet
