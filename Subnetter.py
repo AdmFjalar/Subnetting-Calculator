@@ -12,15 +12,15 @@ def CalculateMaxSubnets(ip, cidr):
         maxSubnets = 2 ** (32 - cidr)                                           # Calculates the maximum number of subnets for the given IP and CIDR notation
     return maxSubnets
 
-def CalculateSubnetMasks(ip, cidr, hostsPerSubnet):
-    subnetMasks = []
+def CalculateSubnets(ip, cidr, hostsPerSubnet):
+    subnets = []
     if (ValidateIPAndCIDR(ip, cidr)):
         for i in range(len(hostsPerSubnet)):                                                                                                                            # Loops through the number of hosts per subnet
             if i == 0:
-                subnetMasks.append(ipaddress.IPv4Network(f'{ip}/{CIDRFromHosts(hostsPerSubnet[i])}', strict=False))                                       # Calculates the subnet mask for the given IP, CIDR, and hosts per subnet (first subnet)
+                subnets.append(ipaddress.IPv4Network(f'{ip}/{CIDRFromHosts(hostsPerSubnet[i])}', strict=False))                                       # Calculates the subnet mask for the given IP, CIDR, and hosts per subnet (first subnet)
             else:
-                subnetMasks.append(ipaddress.IPv4Network(f'{subnetMasks[i-1].broadcast_address + 1}/{CIDRFromHosts(hostsPerSubnet[i])}', strict=False))   # Calculates the subnet mask for the given IP, CIDR, and hosts per subnet
-    return subnetMasks
+                subnets.append(ipaddress.IPv4Network(f'{subnets[i-1].broadcast_address + 1}/{CIDRFromHosts(hostsPerSubnet[i])}', strict=False))   # Calculates the subnet mask for the given IP, CIDR, and hosts per subnet
+    return subnets
 
 def CIDRFromHosts(hosts):
     return 32 - math.ceil(math.log2(hosts))
@@ -74,12 +74,12 @@ def Main():
         print("Invalid input data type.")
         return
 
-    subnetMasks = CalculateSubnetMasks(ip, cidr, hostsPerSubnet)    # Calculates the subnet masks for the given IP, CIDR, and hosts per subnet
+    subnets = CalculateSubnets(ip, cidr, hostsPerSubnet)    # Calculates the subnet masks for the given IP, CIDR, and hosts per subnet
 
-    if subnetMasks:                                                 # If subnetMasks is not empty, print the subnet details
-        VisualizeSubnets(ipaddress.IPv4Network(f'{ip}/{cidr}', strict=False), subnetMasks)
+    if subnets:                                                 # If subnetMasks is not empty, print the subnet details
+        VisualizeSubnets(ipaddress.IPv4Network(f'{ip}/{cidr}', strict=False), subnets)
         print("\nCalculated Subnet Details:")
-        for index, subnet in enumerate(subnetMasks, start=1):
+        for index, subnet in enumerate(subnets, start=1):
             print(f"Subnet {index}:\t{subnet.network_address}/{subnet.prefixlen}")
             print(f"\tSubnet Mask:\t\t{subnet.netmask}")
             print(f"\tNetwork Address:\t{subnet.network_address}")
