@@ -51,13 +51,13 @@ def Main():
 
     maxSubnets = CalculateMaxSubnets(ip, cidr)                      # Calculates the maximum number of subnets for the given IP and CIDR
 
-#create a while loop here
-    doSubs=True
+    continueSubnetting=True
     hostsPerSubnet = []                                             # Initializes the list of hosts per subnet (MOVED FROM TRY)
-    while doSubs:                                                       #loops as long as doSubs=True 
-        try:
-                                                  
+    while continueSubnetting:                                                       #loops as long as doSubs=True 
+        try:                                     
             for i in range(len(hostsPerSubnet), maxSubnets):                                 # Loops through the max number of subnets
+                if (continueSubnetting==False):                                         # If continueSubnetting is false, break loop
+                    break
                 maxHosts = (2 ** (32 - cidr))                           # Calculates the maximum number of hosts for the given IP and CIDR
                 addressesLeft = maxHosts - sum(hostsPerSubnet)          # Calculates the number of addresses left after subtracting the number of hosts for each subnet
                 print("\n-------------------------------------------")
@@ -73,24 +73,21 @@ def Main():
                 addressesLeft = maxHosts - sum(hostsPerSubnet)          # Calculates the number of addresses left after subtracting the number of hosts for each subnet
                 if (addressesLeft <= 0):                                # If the number of addresses left is less than or equal to 0, print message and break loop
                     print("Max hosts reached.")
-                    doSubs=False                                        #Sets doSubs to false and ends loop
+                    continueSubnetting=False                                        #Sets doSubs to false and ends loop
                     break
-                set_bool=input("Continue? Enter Y to continue or N to finish: ") #asks user if they want to keep making subnets or finish
-                if set_bool.lower()=='y':
-                    doSubs=True                                                  #continues loop
-                elif set_bool.lower()=='n':
-                    doSubs=False                                                 #ends loop
-                else:
-                    print(f'\nInvalid input, please enter Y or N: ')
-            hostsPerSubnet.sort(reverse=True)
-
-        
+                hostsPerSubnet.sort(reverse=True)                       # Sorts the list of hosts per subnet in descending order
+                set_bool=""
+                while set_bool.lower()!='y' and set_bool.lower()!='n':  # Loops until user enters y or n
+                    set_bool = input("Continue? Enter Y to continue or N to finish: ") # Asks user if they want to keep making subnets or finish
+                    if set_bool.lower()=='y':
+                        continueSubnetting=True                                                 # Continues loop
+                    elif set_bool.lower()=='n':
+                        continueSubnetting=False                                                # Ends loop
+                    else:
+                        print(f'\nInvalid input, please enter Y or N: ')
         except ValueError:
-            print("Invalid input data type.")                                #breaks Try and continues loop if data error
-            doSubs=True
-            
-#end loop here
-
+            print("Invalid input data type.")
+            continueSubnetting=True
     subnets = CalculateSubnets(ip, cidr, hostsPerSubnet)    # Calculates the subnet masks for the given IP, CIDR, and hosts per subnet
 
     if subnets:                                                 # If subnetMasks is not empty, print the subnet details
