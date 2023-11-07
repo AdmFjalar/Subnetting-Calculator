@@ -66,7 +66,6 @@ def Main():
                 print(f"Total number of adresses left: {addressesLeft}")                                                            # Prints the number of addresses left in the range
                 print(f"Maximum number of hosts supported for subnet {i+1}: {2**math.floor(math.log2(addressesLeft)) - 2}")         # Prints the maximum number of hosts supported for the subnet
                 hostsPerSubnet.append(2**math.ceil(math.log2(int(input(f"Enter the number of hosts for this subnet: ")) + 2)))      # Gets user input and calculates the number of hosts for the subnet
-                
                 if (hostsPerSubnet[i] > addressesLeft):                                                                             # If the number of hosts entered is greater than the number of addresses left, print error message and default to the max number of hosts supported
                     print(f"\nToo many hosts entered, will now default to {2**math.floor(math.log2(addressesLeft)) - 2} hosts.\n")  # Prints the number of hosts that will be used for the subnet
                     hostsPerSubnet[i] = 2**math.floor(math.log2(addressesLeft))
@@ -99,4 +98,4 @@ def Main():
             print(f"\tNetwork Address:\t{subnet.network_address}")
             print(f"\tBroadcast Address:\t{subnet.broadcast_address}")
             print(f"\tHost Range:\t\t{subnet.network_address + 1} - {subnet.broadcast_address - 1}\n")
-Main()  # Calls the main function
+#Main()  # Calls the main function
