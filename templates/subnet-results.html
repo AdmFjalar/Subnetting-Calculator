@@ -1,0 +1,81 @@
+<!DOCTYPE html> 
+<html>
+  <head>
+    <title>Subnet Calculator</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='stylesheet.css') }}">
+  </head>
+  <body>
+    <header>
+        <a href="{{ url_for('HomeFunc') }}"><img class="header-icon" src="{{ url_for('static', filename='Icons/SimpleSubnets.png')}}"></a>
+        <h3>A simple subnet calculator for students</h3>
+    </header>
+    <div class="main container">
+        <div class="container">
+            <form action="{{ url_for('generate_url') }}" method="post">
+                <fieldset>
+                    <label for="base_ip">Base IP Address</label> 
+                    <input readonly type="text" value="{{ base_ip }}" id="base_ip" name="base_ip" required>
+                </fieldset>
+                <fieldset>
+                    <label for="base_cidr">Base CIDR</label>   
+                    <input readonly type="number" value="{{ base_cidr }}" id="base_cidr" min="1" max="30" name="base_cidr" required> 
+                </fieldset>
+                <fieldset>
+                    <label for="hosts">Number of Hosts</label>    
+                    <input type="number" min="2" id="hosts" name="hosts" required>
+                </fieldset>
+                <input type="submit">
+            </form>
+        </div>
+        
+        <div class="container">
+            <table >
+                <tr>
+                  <th>Subnet Number</th> 
+                  <th>Network ID</th>
+                  <th>CIDR</th>  
+                  <th>Total Addresses</th>  
+                  <th>Usable Hosts</th>
+                  <th>Subnet Mask</th>
+                  <th>First IP (Gateway)</th>
+                  <th>Broadcast IP</th>     
+                </tr>    
+                {% for i in range (numberOfSubnets) %}
+                <tr style="background-color: {{ subnetColors[i] }}">
+                  <td>{{ i + 1 }}</td> 
+                  <td>{{ generatedSubnets[i].network_address }}</td>    
+                  <td>{{ generatedSubnets[i].prefixlen }}</td> 
+                  <td>{{ 2 ** (32 - generatedSubnets[i].prefixlen) }}</td>
+                  <td>{{ (2 ** (32 - generatedSubnets[i].prefixlen)) - 2 }}</td>
+                  <td>{{ generatedSubnets[i].netmask }}</td>        
+                  <td>{{ generatedSubnets[i].network_address + 1 }}</td>        
+                  <td>{{ generatedSubnets[i].broadcast_address}}</td>        
+                </tr>    
+                {% endfor %}         
+              </table>
+        </div>
+        <div class="container">
+          <h3>Total amount of addresses left: {{ addressesLeft }}</h3>
+          <table style="background: white;">
+            <tr>
+              <th>CIDR Notation</th> 
+              <th>Total addresses</th>
+              <th>Usable addresses</th>       
+            </tr>    
+            {% for i in range (cidrAvailable, 31) %}
+            <tr>
+              <td>/{{ i }}</td> 
+              <td>{{ 2** (32-i) }}</td>    
+              <td>{{ (2** (32-i)) - 2 }}</td> 
+            </tr>    
+            {% endfor %}         
+          </table>
+        </div>
+    </div>    
+    <footer>
+        <p>Copyright © 2023 Dylan Green, Oliver Grönkrans, Thomas Morrison</p>
+    </footer>
+  </body>
+</html>

@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 def ClearConsole():
     os.system('cls')
 
+
 def CalculateMaxSubnets(ip, cidr):
     maxSubnets = 0
     if (ValidateIPAndCIDR(ip, cidr)):
@@ -23,7 +24,7 @@ def CalculateSubnets(ip, cidr, hostsPerSubnet):
     return subnets
 
 def CIDRFromHosts(hosts):
-    return 32 - math.ceil(math.log2(hosts))
+    return 32 - math.ceil(math.log2(int(hosts)))
 
 def ValidateIPAndCIDR(ip, cidr):
     try:
@@ -32,6 +33,14 @@ def ValidateIPAndCIDR(ip, cidr):
         print("Invalid IP address or CIDR notation.\n")
         return False
     return True
+
+def CheckSortedList(listToCheck):
+    isSorted = True
+    l = len(listToCheck)
+    for i in range(l - 1):
+        if listToCheck[i] < listToCheck[i + 1]:
+            isSorted = False
+    return isSorted
 
 def VisualizeSubnets(baseNetwork, subnets):
     fig, ax = plt.subplots()
