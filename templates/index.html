@@ -10,20 +10,27 @@
             <img class="header-icon" src="{{ url_for('static', filename='Icons/SimpleSubnets.png')}}">
             <h3>A simple subnet calculator for students</h3>
         </header>
-        <div class="main container">
+        <div class="main container block">
+            <div class="block">
+                <p>To get started, enter the block of IP addresses you want to subnet. First enter the network ID and then it's CIDR notation, eg 192.168.0.0/24</p>
+            </div>
             <div class="container">
-                <form action="{{ url_for('generate_url') }}" method="post">
-                    <label for="base_ip">Base IP Address</label> 
-                    <input type="text" value="{{ network_address }}" id="base_ip" name="base_ip" required>
-                  
-                    <label for="base_cidr">Base CIDR</label>   
-                    <input type="number" value="{{ cidr }}" id="base_cidr" min="1" max="30" name="base_cidr" required> 
-                      
-                    <label for="hosts">Number of Hosts</label>    
-                    <input type="number" min="4" id="hosts" name="hosts" required>
-                      
-                    <input type="submit">
-                  </form>
+                 <form action="{{ url_for('generate_url') }}" method="post">
+                    <div class="input-group">
+                        <input type="text" value="{{ network_address }}" id="base_ip" name="base_ip" required>
+                         <h1 class="ip-cidr-slash">/</h1>
+                        <input type="number" value="{{ cidr }}" id="base_cidr" min="1" max="30" name="base_cidr" required> 
+                    </div>
+                    <div class="input-group input-text-line">
+                        <label class="network-label" for="base_ip">Network Address</label> 
+                         <label class="cidr-label" for="base_cidr">CIDR</label>   
+                    </div>
+                    <fieldset>   
+                        <input type="number" min="2" id="hosts" name="hosts" required>
+                        <label class="hosts-label" for="hosts">Number of Hosts</label> 
+                    </fieldset>
+                    <input class="submit" type="submit" value="Generate Subnet">
+                </form>
             </div>
         </div>
         <footer>
