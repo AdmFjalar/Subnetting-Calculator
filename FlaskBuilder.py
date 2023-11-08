@@ -85,7 +85,8 @@ def show_subnet(base_ip, base_cidr, hosts):
                           numberOfSubnets=numberOfSubnets,
                           addressesLeft=addressesLeft,
                           cidrAvailable=cidrAvailable,
-                          subnetColors=subnetColors)
+                          subnetColors=subnetColors,
+                          hostsPerSubnet=hostsPerSubnet)
 
 if __name__ == "__main__":
     app.run(debug=True)

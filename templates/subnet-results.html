@@ -34,6 +34,9 @@
           </form>
         </div>
     </div> 
+    <div class="main container">
+      <canvas id="BarChart" width="100" height="10"></canvas>
+    </div>
     <div class="main container outputs">
         <div class="container">
           <h3>Created Subnets</h3>
@@ -82,6 +85,43 @@
     </div>   
     <footer>
         <p>Copyright © 2023 Dylan Green, Oliver Grönkrans, Thomas Morrison</p>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+          var datasets = [];
+        
+          var hostsPerSubnet = {{ hostsPerSubnet | tojson | safe }};
+          var subnetColors = {{ subnetColors | tojson | safe }};
+
+          for (var i = 0; i < {{ numberOfSubnets }}; i++) {
+            datasets.push({
+              label: 'Subnet ' + (i + 1),
+              data: [hostsPerSubnet[i]], // Remove the double quotes around data value
+              backgroundColor: subnetColors[i].toString(),
+            });
+          }
+        
+          var chartData = {
+            datasets: datasets,
+          };
+        
+          var ctx = document.getElementById('BarChart').getContext('2d');
+          var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: chartData,
+            options: {
+              indexAxis: 'y',
+              scales: {
+                y: {
+                  stacked: true, // Change yAxes to y
+                  ticks: {
+                    beginAtZero:true,
+                  }
+                },
+              },
+            },
+          });
+        </script>
+        
     </footer>
   </body>
 </html>
