@@ -85,10 +85,11 @@
     </div>   
     <footer>
         <p>Copyright © 2023 Dylan Green, Oliver Grönkrans, Thomas Morrison</p>
-        <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.js"></script>
         <script>
           var datasets = [];
-        
+          
           var hostsPerSubnet = {{ hostsPerSubnet | tojson }};
           var subnetColors = {{ subnetColors | tojson }};
 
@@ -96,8 +97,8 @@
             datasets.push({
               label: 'Subnet ' + (i + 1),
               data: [hostsPerSubnet[i]], // Remove the double quotes around data value
-              backgroundColor: '#FFFFFF',// subnetColors[i].toString(),
-              borderColor: '#FFFFFF',// subnetColors[i].toString(),
+              backgroundColor: subnetColors[i].toString(),
+              borderColor: subnetColors[i].toString(),
             });
           }
         
@@ -141,10 +142,6 @@
               indexAxis: 'y',
             }
           });
-
-          chart.options.scales.x.display = true;
-          chart.options.scales.y.display = true; 
-          chart.options.elements.bar.display = true;
           chart.update();
         </script>
         
