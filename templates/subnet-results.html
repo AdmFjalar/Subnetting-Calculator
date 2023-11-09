@@ -85,18 +85,19 @@
     </div>   
     <footer>
         <p>Copyright © 2023 Dylan Green, Oliver Grönkrans, Thomas Morrison</p>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
         <script>
           var datasets = [];
         
-          var hostsPerSubnet = {{ hostsPerSubnet | tojson | safe }};
-          var subnetColors = {{ subnetColors | tojson | safe }};
+          var hostsPerSubnet = {{ hostsPerSubnet | tojson }};
+          var subnetColors = {{ subnetColors | tojson }};
 
           for (var i = 0; i < {{ numberOfSubnets }}; i++) {
             datasets.push({
               label: 'Subnet ' + (i + 1),
               data: [hostsPerSubnet[i]], // Remove the double quotes around data value
-              backgroundColor: subnetColors[i].toString(),
+              backgroundColor: '#FFFFFF',// subnetColors[i].toString(),
+              borderColor: '#FFFFFF',// subnetColors[i].toString(),
             });
           }
         
@@ -105,30 +106,46 @@
           };
         
           var ctx = document.getElementById('BarChart').getContext('2d');
-          var myChart = new Chart(ctx, {
+          var chart = new Chart(ctx, {
             type: 'bar',
             data: chartData,
             options: {
-              responsive: true,
               plugins: {
-                legend: {
-                  display: false,
-                },
                 title: {
-                  display: false,
+                  display: true,
+                  text: 'Network range',
                 },
               },
-              indexAxis: 'y',
               scales: {
                 y: {
-                  stacked: true, // Change yAxes to y
+                  stacked: true,
+                  display: false,
                   ticks: {
-                    beginAtZero:true,
+                    min: 0,
+                  },
+                },
+                x: {
+                  stacked: true,
+                  display: true,
+                  ticks: {
+                    min: 0,
                   },
                 },
               },
-            },
+              elements: {
+                bar: {
+                  display: true,
+                }
+              },
+              responsive: true,
+              indexAxis: 'y',
+            }
           });
+
+          chart.options.scales.x.display = true;
+          chart.options.scales.y.display = true; 
+          chart.options.elements.bar.display = true;
+          chart.update();
         </script>
         
     </footer>
