@@ -154,14 +154,36 @@ fieldset {
     margin-right: 0;
     width: 100%;
 }
+.input_subnet {
+    display: flex;
+    flex-direction: column;
+    background-color: #007BD3;
+    margin: 2.5%;
+    padding-top: 0%;
+    padding-left: 2.5%;
+    padding-bottom: 2.5%;
+    padding-right: 2.5%;
+    
+    align-items: center;
+    
+    color: #FFFFFF;
+    border: solid black 1px;
+    border-radius: 20px;
+}
+.create_subnet{
+    width: 100%;
+    
+
+}
 
 .block {
     display: block;
     width: 100%;
 }
 
+
 .main {
-    padding-top: 15rem;
+    padding-top: 12rem;
     justify-content: center;
     align-content: center;
     width: 100%;
@@ -205,6 +227,7 @@ fieldset {
     height: 100%;
 }
 
+
 .outputs > .container > * {
     margin-top: 0;
     padding-top: 0;
@@ -215,8 +238,14 @@ fieldset {
     padding: 0 10px 10px 10px;
     display: flex;
     flex-direction: column; /* To stack contents vertically */
-    width: 48%;
+    width: auto;
     margin-bottom: auto;
+}
+
+.boxybox{
+    height: fit-content;
+    width: 40%;
+    padding: 5%;
 }
 
 /* .ip-cidr-slash {
@@ -229,5 +258,7 @@ fieldset {
 }
 
 #hosts {
-    width: 100%;
+    width: 5rem;
+    height: auto;
+    margin: 2%;
 }

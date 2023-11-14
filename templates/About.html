@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="{{ url_for('static', filename='stylesheet.css') }}">
+    </head>
+    <body>
+        <header>
+            <img class="header-icon" src="{{ url_for('static', filename='Icons/SimpleSubnets.png')}}">
+            <h3>A simple subnet calculator for students</h3>
+        </header>
+        <div class="main container block">
+            <p>
+                Write shit about subnets here.
+            </p>
+            Here create binary and decimal display blocks for the IP and Subnet, fetch contents from backend. 
+            <input readonly type="text" value="{{ base_ip }}" id="base_ip" name="base_ip" required>
+                  <h1 class="ip-cidr-slash">/</h1>
+                  <input readonly type="number" value="{{ base_cidr }}" id="base_cidr" min="1" max="30" name="base_cidr" required> 
+            <p>
+                More explanatory stuff here.
+            </p>
+        
+        
+                </div>
+        <footer>
+            <p>Copyright © 2023 Dylan Green, Oliver Grönkrans, Thomas Morrison</p>
+        </footer>
+    </body>
+</html>
