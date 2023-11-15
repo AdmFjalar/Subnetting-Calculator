@@ -29,6 +29,7 @@ def generate_url():
     base_ip = request.form['base_ip']   
     base_cidr = int(request.form['base_cidr'])
     hosts = int(request.form['hosts'])
+    
 
     maxHosts = (2 ** (32 - base_cidr))      
     
@@ -50,7 +51,7 @@ def generate_url():
 def show_subnet(base_ip, base_cidr, hosts):
     # Get hosts list by splitting hosts_list 
     hosts = hosts.split(",")
-
+   
     maxHosts = (2 ** (32 - int(base_cidr)))     
     addressesLeft = maxHosts - sum(hostsPerSubnet)
 
@@ -77,7 +78,12 @@ def show_subnet(base_ip, base_cidr, hosts):
         if (2**cidrAvailable > addressesLeft):
             cidrAvailable = 32 - math.floor(math.log2(int(addressesLeft)))
 
+    # calculate base network object and extract base broadcast
+    baseNetwork=CalculateRootNetwork(base_ip, base_cidr)
+    base_broadcast=baseNetwork.broadcast_address
+
     # Return results template
+
     return render_template('subnet-results.html',
                           base_ip=base_ip,   
                           base_cidr=base_cidr,
@@ -86,7 +92,8 @@ def show_subnet(base_ip, base_cidr, hosts):
                           addressesLeft=addressesLeft,
                           cidrAvailable=cidrAvailable,
                           subnetColors=subnetColors,
-                          hostsPerSubnet=hostsPerSubnet)
+                          hostsPerSubnet=hostsPerSubnet,
+                          base_broadcast=base_broadcast)
 
 if __name__ == "__main__":
     app.run(debug=True)

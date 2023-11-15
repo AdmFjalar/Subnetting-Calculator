@@ -25,10 +25,12 @@
                         <label class="network-label" for="base_ip">Network Address</label> 
                          <label class="cidr-label" for="base_cidr">CIDR</label>   
                     </div>
-                    <input class="submit" type="submit" value="Start subnetting!">
-                    <!--This button needs to link to "generate subnets"-->
+                    <fieldset>   
+                        <input type="number" min="2" id="hosts" name="hosts" required>
+                        <label class="hosts-label" for="hosts">Number of Hosts</label> 
+                    </fieldset>
+                    <input class="submit" type="submit" value="Generate Subnet">
                 </form>
-               
             </div>
         </div>
         <footer>

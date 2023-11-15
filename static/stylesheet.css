@@ -113,6 +113,19 @@ input[type=number], input[type=text] {
     appearance: textfield;
 }
 
+output[type=number] {
+    background-color: #D9D9D9;
+    border-radius: 15px;
+    display: block;
+    color: black;
+  
+    font-family: 'Itim';
+    font-size: 1.75rem;
+    padding: 0.5rem;
+    border: solid black 1px;
+    border-radius: 10px;
+}
+
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button {
   -webkit-appearance: textfield;
@@ -242,11 +255,22 @@ fieldset {
     margin-bottom: auto;
 }
 
-.boxybox{
-    height: fit-content;
-    width: 40%;
-    padding: 5%;
+.output_param{
+    display: flex;
+    flex-direction: column;
+    padding: 10px
+   
 }
+
+
+.display_box{
+    background-color: #D9D9D9;
+    border-radius: 10%;
+    border: solid black 1%;
+    
+}
+
+
 
 /* .ip-cidr-slash {
     display: inline;

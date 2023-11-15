@@ -6,6 +6,8 @@ import matplotlib.pyplot as plt
 def ClearConsole():
     os.system('cls')
 
+def CalculateRootNetwork(ip, cidr):
+    return ipaddress.IPv4Network(f'{ip}/{cidr}', strict=False)
 
 def CalculateMaxSubnets(ip, cidr):
     maxSubnets = 0
