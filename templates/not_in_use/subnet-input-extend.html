@@ -1,0 +1,21 @@
+{% extends subnet-results.html %}
+{% block content_block%}
+    <div class="input_subnet">
+      
+      <h1>Create Subnet</h1>
+      <form>
+      <div class="container">
+        <h3>
+          Enter the number of hosts you require in this subnet:
+        </h3>
+        <fieldset>
+        <input type="number" min="2" id="hosts" name="hosts" required>
+        </fieldset>
+    
+    </div>
+    </form>
+    <form>
+    <input class="submit create_subnet" type="submit" value="Generate Subnet">
+  </form>
+    </div>
+{% endblock %}

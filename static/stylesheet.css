@@ -113,6 +113,19 @@ input[type=number], input[type=text] {
     appearance: textfield;
 }
 
+output[type=number] {
+    background-color: #D9D9D9;
+    border-radius: 15px;
+    display: block;
+    color: black;
+  
+    font-family: 'Itim';
+    font-size: 1.75rem;
+    padding: 0.5rem;
+    border: solid black 1px;
+    border-radius: 10px;
+}
+
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button {
   -webkit-appearance: textfield;
@@ -154,14 +167,36 @@ fieldset {
     margin-right: 0;
     width: 100%;
 }
+.input_subnet {
+    display: flex;
+    flex-direction: column;
+    background-color: #007BD3;
+    margin: 2.5%;
+    padding-top: 0%;
+    padding-left: 2.5%;
+    padding-bottom: 2.5%;
+    padding-right: 2.5%;
+    
+    align-items: center;
+    
+    color: #FFFFFF;
+    border: solid black 1px;
+    border-radius: 20px;
+}
+.create_subnet{
+    width: 100%;
+    
+
+}
 
 .block {
     display: block;
     width: 100%;
 }
 
+
 .main {
-    padding-top: 15rem;
+    padding-top: 12rem;
     justify-content: center;
     align-content: center;
     width: 100%;
@@ -205,6 +240,7 @@ fieldset {
     height: 100%;
 }
 
+
 .outputs > .container > * {
     margin-top: 0;
     padding-top: 0;
@@ -215,9 +251,32 @@ fieldset {
     padding: 0 10px 10px 10px;
     display: flex;
     flex-direction: column; /* To stack contents vertically */
-    width: 48%;
+    width: auto;
     margin-bottom: auto;
 }
+
+.output_param{
+    display: flex;
+    flex-direction: column;
+    padding: 10px
+   
+}
+
+
+.display_box{
+    background-color: #D9D9D9;
+    border-radius: 10%;
+    border: solid black 1%;
+    
+}
+
+
+
+.chart {
+    padding-top: 1rem;
+}
+
+
 
 /* .ip-cidr-slash {
     display: inline;
@@ -229,5 +288,18 @@ fieldset {
 }
 
 #hosts {
-    width: 100%;
+    width: 5rem;
+    height: auto;
+    margin: 2%;
+}
+
+
+
+#BarChart {
+    margin: 0;
+    width: 75vw;
+}
+
+.ct-bar {
+    stroke-width: 30px!important;
 }
