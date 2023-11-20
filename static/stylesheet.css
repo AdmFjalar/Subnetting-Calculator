@@ -302,9 +302,11 @@ fieldset {
 
 .ct-bar {
     stroke-width: 30px!important;
-    fill: url(#horizontal-stripe)!important;
 }
 
 .ct-bar-last{
-    fill: url(#horizontal-stripe);
+    background:url(
+        data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAHklEQVQIW2NkQAX/GZH4/4FsRpgAmAOSBBFwDkgAAIKuBATRTAAZAAAAAElFTkSuQmCC
+    ) repeat!important;
+
 }

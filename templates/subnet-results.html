@@ -112,7 +112,7 @@
         hostsPerSubnet.push({{ addressesLeft }}); //  ADDS THE ADDRESS-SPACE LEFT
 
         var subnetColors = {{ subnetColors | tojson }};
-        subnetColors.push(pattern.draw('diagonal', '#d3d3d3'));             //  ADDS A LIGHT GRAY FOR THE ADDRESS-SPACE LEFT
+        subnetColors.push('#d3d3d3');             //  ADDS A LIGHT GRAY FOR THE ADDRESS-SPACE LEFT
 
         var myChart = new Chartist.BarChart(
         '#BarChart',
@@ -143,9 +143,13 @@
 
         data.element._node.style.stroke = subnetColors[seriesIndex].toString();
         data.element._node.style.fill = subnetColors[seriesIndex].toString();
-        data.element._node.backgroundColor = subnetColors[seriesIndex];
+
+        if (subnetColors[seriesIndex].toString() === "#d3d3d3") {
+          data.element._node.classList.add('ct-bar-last');
+        }
       }
     });
+
     </script>
 
 {% endblock %}
