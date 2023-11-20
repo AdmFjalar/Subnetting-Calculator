@@ -50,8 +50,8 @@
     <input class="submit" type="submit" value="Generate Subnet">
   </form>
 </div>
-  <div class="main container">
-    <canvas id="BarChart" width="100" height="10"></canvas>
+  <div class="main container chart">
+    <div id="BarChart"></div>
   </div>
   <div class="main container outputs">
       <div class="table container">
@@ -104,64 +104,45 @@
 
 
   {% block js_block%}
+    <script src="https://cdn.jsdelivr.net/npm/chartist@1.3.0/dist/index.umd.min.js"></script>
 
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.js"></script>
-        <script>
-          var datasets = [];
-          
-          var hostsPerSubnet = {{ hostsPerSubnet | tojson }};
-          var subnetColors = {{ subnetColors | tojson }};
+    <script>
 
-          for (var i = 0; i < {{ numberOfSubnets }}; i++) {
-            datasets.push({
-              label: 'Subnet ' + (i + 1),
-              data: [hostsPerSubnet[i]], // Remove the double quotes around data value
-              backgroundColor: subnetColors[i].toString(),
-              borderColor: subnetColors[i].toString(),
-            });
-          }
-        
-          var chartData = {
-            datasets: datasets,
-          };
-        
-          var ctx = document.getElementById('BarChart').getContext('2d');
-          var chart = new Chart(ctx, {
-            type: 'bar',
-            data: chartData,
-            options: {
-              plugins: {
-                title: {
-                  display: true,
-                  text: 'Network range',
-                },
-              },
-              scales: {
-                y: {
-                  stacked: true,
-                  display: false,
-                  ticks: {
-                    min: 0,
-                  },
-                },
-                x: {
-                  stacked: true,
-                  display: true,
-                  ticks: {
-                    min: 0,
-                  },
-                },
-              },
-              elements: {
-                bar: {
-                  display: true,
-                }
-              },
-              responsive: true,
-              indexAxis: 'y',
-            }
-          });
-          chart.update();
-        </script>
+        var hostsPerSubnet = {{ hostsPerSubnet | tojson }};
+        hostsPerSubnet.push({{ addressesLeft }}); //  ADDS THE ADDRESS-SPACE LEFT
+
+        var subnetColors = {{ subnetColors | tojson }};
+        subnetColors.push('#d3d3d3');             //  ADDS A LIGHT GRAY FOR THE ADDRESS-SPACE LEFT
+
+        var myChart = new Chartist.BarChart(
+        '#BarChart',
+        {
+        series: hostsPerSubnet
+      },
+      {
+        horizontalBars: true,
+        stackBars: true,
+        axisX: {
+          showLabel: false,
+          showGrid: false
+        },
+        axisY: {
+          showLabel: false,
+          showGrid: false
+        },
+        barWidth: 50, // Adjust the thickness of the bars
+      }
+    );
+   
+    myChart.on('draw', function(data) {
+      if (data.type === 'bar' && data.seriesIndex !== undefined) {
+ 
+        var seriesIndex = data.seriesIndex;
+ 
+        data.element._node.style.stroke = subnetColors[seriesIndex].toString();
+        data.element._node.style.fill = subnetColors[seriesIndex].toString();
+      }
+    });
+    </script>
 
 {% endblock %}

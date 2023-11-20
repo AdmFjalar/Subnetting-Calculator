@@ -272,6 +272,12 @@ fieldset {
 
 
 
+.chart {
+    padding-top: 1rem;
+}
+
+
+
 /* .ip-cidr-slash {
     display: inline;
     padding: 0;
@@ -285,4 +291,15 @@ fieldset {
     width: 5rem;
     height: auto;
     margin: 2%;
+}
+
+
+
+#BarChart {
+    margin: 0;
+    width: 75vw;
+}
+
+.ct-bar {
+    stroke-width: 30px!important;
 }
