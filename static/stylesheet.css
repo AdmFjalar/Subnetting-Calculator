@@ -302,4 +302,9 @@ fieldset {
 
 .ct-bar {
     stroke-width: 30px!important;
+    fill: url(#horizontal-stripe)!important;
+}
+
+.ct-bar-last{
+    fill: url(#horizontal-stripe);
 }

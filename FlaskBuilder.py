@@ -27,6 +27,10 @@ def generate_url():
     base_ip = request.form['base_ip']   
     base_cidr = int(request.form['base_cidr'])
     hostsPerSubnet = request.form.get('hosts_per_subnet', [])
+
+    if (ValidateIPAndCIDR(base_ip, base_cidr) == False):
+        return redirect("/")
+
     if hostsPerSubnet:
         hostsPerSubnet = [ int(subnetHosts) for subnetHosts in hostsPerSubnet.split("-")]
     if hostsPerSubnet == "":

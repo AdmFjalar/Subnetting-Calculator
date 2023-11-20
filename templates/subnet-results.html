@@ -43,7 +43,7 @@
         <input type="hidden" value="{{ base_cidr }}" id="base_cidr" name="base_cidr">
         <input type="hidden" value="{{ actual_hosts|join('-') }}" id="hosts_per_subnet" name="hosts_per_subnet">
     <fieldset>   
-        <input type="number" min="2" id="hosts" name="hosts" required>
+        <input type="number" min="2" max="{{ 2**(32-cidrAvailable) }}" id="hosts" name="hosts" required>
         <label class="hosts-label" for="hosts">Number of Hosts</label> 
     </fieldset> 
 
@@ -105,19 +105,20 @@
 
   {% block js_block%}
     <script src="https://cdn.jsdelivr.net/npm/chartist@1.3.0/dist/index.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/patternomaly@1.3.2/dist/patternomaly.min.js"></script>
 
     <script>
-
         var hostsPerSubnet = {{ hostsPerSubnet | tojson }};
         hostsPerSubnet.push({{ addressesLeft }}); //  ADDS THE ADDRESS-SPACE LEFT
 
         var subnetColors = {{ subnetColors | tojson }};
-        subnetColors.push('#d3d3d3');             //  ADDS A LIGHT GRAY FOR THE ADDRESS-SPACE LEFT
+        subnetColors.push(pattern.draw('diagonal', '#d3d3d3'));             //  ADDS A LIGHT GRAY FOR THE ADDRESS-SPACE LEFT
 
         var myChart = new Chartist.BarChart(
         '#BarChart',
         {
-        series: hostsPerSubnet
+        series: hostsPerSubnet,
+        backgroundColor: subnetColors,
       },
       {
         horizontalBars: true,
@@ -133,14 +134,16 @@
         barWidth: 50, // Adjust the thickness of the bars
       }
     );
-   
+
     myChart.on('draw', function(data) {
       if (data.type === 'bar' && data.seriesIndex !== undefined) {
  
         var seriesIndex = data.seriesIndex;
- 
+        var currentSeries = myChart.data.series[seriesIndex];
+
         data.element._node.style.stroke = subnetColors[seriesIndex].toString();
         data.element._node.style.fill = subnetColors[seriesIndex].toString();
+        data.element._node.backgroundColor = subnetColors[seriesIndex];
       }
     });
     </script>
