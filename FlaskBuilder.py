@@ -22,7 +22,7 @@ def HomeFunc():
 
 @app.route('/about')
 def AboutFunc():
-    return "About"
+    return render_template("About")
 
 @app.route('/generate_url', methods=['POST'])
 def generate_url():
@@ -94,6 +94,22 @@ def show_subnet(base_ip, base_cidr, hosts):
                           subnetColors=subnetColors,
                           hostsPerSubnet=hostsPerSubnet,
                           base_broadcast=base_broadcast)
+
+#Route to subnet-input child
+@app.route('/subnet/<base_ip>/<base_cidr>/<hosts>/subnet-input-extend.html')
+def show_input():
+    return render_template('subnet-input-extend.html')
+
+#Route to the subnet-output child
+@app.route('/subnet/<base_ip>/<base_cidr>/<hosts>/subnet-output-extend.html')
+def show_output(base_ip,base_cidr,hostsPerSubnet):
+    # Call subnetter functions to generate subnets    
+    generatedSubnets = CalculateSubnets(base_ip, base_cidr, hostsPerSubnet)
+   
+    numberOfSubnets = len(generatedSubnets)
+    return render_template('subnet-output-extend.html',
+                    generatedSubnets=generatedSubnets,
+                    numberOfSubnets=numberOfSubnets)
 
 if __name__ == "__main__":
     app.run(debug=True)
