@@ -3,18 +3,16 @@ from Subnetter import *
 import random
 import colorsys
 
-hostsPerSubnet = []
 subnetColors = []
 
 app = Flask(__name__)
 
-@app.route('/index')
+@app.route('/')
 def HomeFunc():
     # Define the data you want to pass to the template
     network_address = "192.168.0.0"
     cidr = 24
 
-    hostsPerSubnet.clear()
     subnetColors.clear()
 
     # Pass the data to the template
@@ -28,20 +26,28 @@ def AboutFunc():
 def generate_url():
     base_ip = request.form['base_ip']   
     base_cidr = int(request.form['base_cidr'])
-    hosts = int(request.form['hosts'])
-    
+    hostsPerSubnet = request.form.get('hosts_per_subnet', [])
+    if hostsPerSubnet:
+        hostsPerSubnet = [ int(subnetHosts) for subnetHosts in hostsPerSubnet.split("-")]
+    if hostsPerSubnet == "":
+        hostsPerSubnet = []
+    hosts = int(request.form.get('hosts', 0))
 
     maxHosts = (2 ** (32 - base_cidr))      
     
-    addressesLeft = maxHosts - sum(hostsPerSubnet)
+    hostsList = "new"
+    if not hosts and hostsPerSubnet:
+        hostsList = "-".join([str(item) for item in hostsPerSubnet])
+    elif hosts:
+        addressesLeft = maxHosts - sum(hostsPerSubnet)
 
-    if addressesLeft > 0:    
-        hosts = 2**math.ceil(math.log2(hosts))
-        if hosts > addressesLeft:
-            hosts = 2**math.floor(math.log2(addressesLeft))
-        hostsPerSubnet.append(hosts)
-        hostsPerSubnet.sort(reverse=True)
-    hostsList = ",".join([str(item) for item in hostsPerSubnet])
+        if addressesLeft > 0:    
+            hosts = 2**math.ceil(math.log2(hosts))
+            if hosts > addressesLeft:
+                hosts = 2**math.floor(math.log2(addressesLeft))
+            hostsPerSubnet.append(hosts)
+            hostsPerSubnet.sort(reverse=True)
+        hostsList = "-".join([str(item) for item in hostsPerSubnet])
 
     url = f"/subnet/{base_ip}/{base_cidr}/{hostsList}"
     
@@ -49,27 +55,29 @@ def generate_url():
 
 @app.route('/subnet/<base_ip>/<base_cidr>/<hosts>')
 def show_subnet(base_ip, base_cidr, hosts):
-    # Get hosts list by splitting hosts_list 
-    hosts = hosts.split(",")
+    if hosts == "new":
+        hosts = []
+    else:
+        # Get hosts list by splitting hosts_list 
+        hosts = hosts.split("-")
    
-    maxHosts = (2 ** (32 - int(base_cidr)))     
-    addressesLeft = maxHosts - sum(hostsPerSubnet)
+    maxHosts = (2 ** (32 - int(base_cidr)))
 
-    hostsPerSubnet.clear()
+    recalculatedHosts = []
 
     for i in range(len(hosts)):
-        hostsPerSubnet.append(2**math.ceil(math.log2(int(hosts[i]))))
+        recalculatedHosts.append(2**math.ceil(math.log2(int(hosts[i]))))
         if (len(subnetColors) < len(hosts)):     
             subnetColors.append('#' + '%06x' % random.randint(0, 0xFFFFFF))
-    if (CheckSortedList(hostsPerSubnet) == False):
-        hostsPerSubnet.sort(reverse=True)
+    if (CheckSortedList(recalculatedHosts) == False):
+        recalculatedHosts.sort(reverse=True)
     
     # Call subnetter functions to generate subnets    
-    generatedSubnets = CalculateSubnets(base_ip, base_cidr, hostsPerSubnet)
+    generatedSubnets = CalculateSubnets(base_ip, base_cidr, recalculatedHosts)
    
     numberOfSubnets = len(generatedSubnets)
 
-    addressesLeft = maxHosts - sum(hostsPerSubnet)
+    addressesLeft = maxHosts - sum(recalculatedHosts)
     
     cidrAvailable = 32
 
@@ -92,16 +100,17 @@ def show_subnet(base_ip, base_cidr, hosts):
                           addressesLeft=addressesLeft,
                           cidrAvailable=cidrAvailable,
                           subnetColors=subnetColors,
-                          hostsPerSubnet=hostsPerSubnet,
-                          base_broadcast=base_broadcast)
+                          hostsPerSubnet=recalculatedHosts,
+                          base_broadcast=base_broadcast,
+                          actual_hosts=hosts)
 
 #Route to subnet-input child
-@app.route('/subnet/<base_ip>/<base_cidr>/<hosts>/subnet-input-extend.html')
+@app.route('/subnet/<base_ip>/<base_cidr>/<hosts>/input')
 def show_input():
     return render_template('subnet-input-extend.html')
 
 #Route to the subnet-output child
-@app.route('/subnet/<base_ip>/<base_cidr>/<hosts>/subnet-output-extend.html')
+@app.route('/subnet/<base_ip>/<base_cidr>/<hosts>/output')
 def show_output(base_ip,base_cidr,hostsPerSubnet):
     # Call subnetter functions to generate subnets    
     generatedSubnets = CalculateSubnets(base_ip, base_cidr, hostsPerSubnet)

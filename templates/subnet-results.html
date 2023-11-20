@@ -1,16 +1,5 @@
-<!DOCTYPE html> 
-<html>
-  <head>
-    <title>Subnet Calculator</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='stylesheet.css') }}">
-  </head>
-  <body>
-    <header>
-        <a href="{{ url_for('HomeFunc') }}"><img class="header-icon" src="{{ url_for('static', filename='Icons/SimpleSubnets.png')}}"></a>
-        <h3>A simple subnet calculator for students</h3>
-    </header>
+{% extends "main.html" %}
+{% block content_block%}
     <div class="main container block">
       <div class="block">
         <p>To get started, enter the block of IP addresses you want to subnet. First enter the network ID and then it's CIDR notation, eg 192.168.0.0/24</p>
@@ -44,9 +33,23 @@
     </p>
     </div>
 </div> 
-  {% block content_block %}
-  <!--subnet input and output box goes here-->
-  {% endblock %}
+<div class="input_subnet">
+  <h1>Create Subnet</h1>
+  <h3>
+    Enter the number of hosts you require in this subnet:
+  </h3>
+  <form action="{{ url_for('generate_url') }}" method="post">
+        <input type="hidden" value="{{ base_ip }}" id="base_ip" name="base_ip" required>
+        <input type="hidden" value="{{ base_cidr }}" id="base_cidr" name="base_cidr">
+        <input type="hidden" value="{{ actual_hosts|join('-') }}" id="hosts_per_subnet" name="hosts_per_subnet">
+    <fieldset>   
+        <input type="number" min="2" id="hosts" name="hosts" required>
+        <label class="hosts-label" for="hosts">Number of Hosts</label> 
+    </fieldset> 
+
+    <input class="submit" type="submit" value="Generate Subnet">
+  </form>
+</div>
   <div class="main container">
     <canvas id="BarChart" width="100" height="10"></canvas>
   </div>
@@ -97,9 +100,10 @@
     </div>
 
   </div>  
-  
-    <footer>
-        <p>Copyright © 2023 Dylan Green, Oliver Grönkrans, Thomas Morrison</p>
+  {% endblock %}
+
+
+  {% block js_block%}
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.js"></script>
         <script>
@@ -159,7 +163,5 @@
           });
           chart.update();
         </script>
-        
-    </footer>
-  </body>
-</html>
+
+{% endblock %}

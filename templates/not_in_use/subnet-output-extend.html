@@ -12,8 +12,8 @@
       <input type="number" min="2" id="hosts" name="hosts" required>
       </fieldset>
   
+    </form>
   </div>
-  </form>
   <p>
     The closest subnet that can accomidate X{{(hosts)}}X hosts is / {{ generatedSubnets[(numberOfSubnets-1)].prefixlen }}
     with {{ (2 ** (32 - generatedSubnets[(numberOfSubnets-1)].prefixlen)) - 2 }} available host addresses. 
