@@ -106,7 +106,7 @@ def show_subnet(base_ip, base_cidr, hosts):
             cidrAvailable = 32 - math.floor(math.log2(int(addressesLeft)))
 
     # calculate base network object and extract base broadcast
-    baseNetwork=CalculateRootNetwork(base_ip, base_cidr)
+    baseNetwork=CalculateNetwork(base_ip, base_cidr)
     base_broadcast=baseNetwork.broadcast_address
 
     # Return results template
