@@ -148,11 +148,15 @@ input {
     padding: 0.5rem;
     border: solid black 1px;
     border-radius: 10px;
+    
 }
+
 
 fieldset {
     border: none;
     /* display: inline; */
+    display: flex;
+    flex-direction: column;
 }
 
 .header-icon {
@@ -279,6 +283,8 @@ fieldset {
 
 .chart {
     padding-top: 1rem;
+    flex-direction:column;
+    justify-items: center;
 }
 
 
@@ -322,7 +328,19 @@ fieldset {
     padding-left: 25px;
 }
 
+.IPaddresses{
+   display: flex;
+   flex-direction: row;
+   justify-content: space-between;
+   height: fit-content;
+    
+}
+.IP{
+    display: flex;
+    flex-direction: column;
+    height: fit-content;
 
+}
 
 /* .ip-cidr-slash {
     display: inline;
@@ -344,6 +362,9 @@ fieldset {
 #BarChart {
     margin: 0;
     width: 75vw;
+    align-self: center;
+    display: flex;
+    flex-direction: column-reverse;
 }
 
 .ct-bar {

@@ -36,16 +36,24 @@
   {% if addressesLeft > 0 %}
     <div class="input_subnet">
       <h1>Create Subnet</h1>
-      <h3>
-        Enter the number of hosts you require in this subnet:
-      </h3>
+    
+      Subnets will be ordered automatically from largest to smallest. Please make sure you've created all the subnets 
+      you need before you start using them. If you create larger subnets out of order, the existing subnets will be
+       re-ordered and given new first and last IPs.<br>      <br>
+       You can enter any number of required host address (for both devices and router ports) and the calculator will create the nearest subnet that is large enough 
+       to accomidate this number. Remember two addresses must be reserved for the ID and Broadcast IPS. 
       <form action="{{ url_for('generate_url') }}" method="post">
         <input type="hidden" value="{{ base_ip }}" id="base_ip" name="base_ip" required>
         <input type="hidden" value="{{ base_cidr }}" id="base_cidr" name="base_cidr">
         <input type="hidden" value="{{ actual_hosts|join('-') }}" id="hosts_per_subnet" name="hosts_per_subnet">
         <fieldset>   
+          <div class="outputs">
+            <h3>
+              Addresses needed in this subnet:
+            </h3>
           <input type="number" min="2" max="{{ 2**(32-cidrAvailable) }}" id="hosts" name="hosts" required>
-          <label class="hosts-label" for="hosts">Number of Hosts</label> 
+          
+        </div>
         </fieldset> 
         <input class="submit" type="submit" value="Generate Subnet">
       </form>
@@ -76,8 +84,22 @@
 
   
   <div class="main container chart">
-    <div id="BarChart"></div>
+    <div id="BarChart">
+      <div class="IPaddresses">
+        <div class="IP">
+          <h4>First ID:<br>
+          {{base_ip}}</h4>
+        </div>
+        <div class="IP">
+          <h4>Last IP:<br>
+          {{base_broadcast}}</h4>
+        </div>
+        
+      </div>
+    </div>
+   
   </div>
+  
   <div class="main container outputs">
       <div class="table container">
         <h3>Created Subnets</h3>
