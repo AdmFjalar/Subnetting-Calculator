@@ -101,7 +101,6 @@ def RunInConsole():
     subnets = CalculateSubnets(ip, cidr, hostsPerSubnet)    # Calculates the subnet masks for the given IP, CIDR, and hosts per subnet
 
     if subnets:                                                 # If subnetMasks is not empty, print the subnet details
-        VisualizeSubnets(ipaddress.IPv4Network(f'{ip}/{cidr}', strict=False), subnets)
         print("\nCalculated Subnet Details:")
         for index, subnet in enumerate(subnets, start=1):
             print(f"Subnet {index}:\t{subnet.network_address}/{subnet.prefixlen}")

@@ -52,10 +52,7 @@ def generate_url():
             if hosts > addressesLeft:
                 hosts = 2**math.floor(math.log2(addressesLeft))
             hostsPerSubnet.append(hosts)
-            
-        if (CheckSortedList(hostsPerSubnet) == False):
             hostsPerSubnet.sort(reverse=True)
-            flash("Re-ordered subnets to adjust for the larger subnet!", 'warning')
         hostsList = "-".join([str(item) for item in hostsPerSubnet])
 
     url = f"/subnet/{base_ip}/{base_cidr}/{hostsList}"
@@ -82,7 +79,11 @@ def show_subnet(base_ip, base_cidr, hosts):
         recalculatedHosts.append(2**math.ceil(math.log2(int(hosts[i]))))
         if (len(subnetColors) < len(hosts)):     
             subnetColors.append('#' + '%06x' % random.randint(0, 0xFFFFFF))
-
+    if (CheckSortedList(recalculatedHosts) == False):
+        recalculatedHosts.sort(reverse=True)
+        message = "Re-ordered subnets to adjust for the larger subnet!"
+    else:
+        message = None
     # Call subnetter functions to generate subnets    
     generatedSubnets = CalculateSubnets(base_ip, base_cidr, recalculatedHosts)
    
