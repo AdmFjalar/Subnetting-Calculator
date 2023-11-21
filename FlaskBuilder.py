@@ -67,6 +67,10 @@ def show_subnet(base_ip, base_cidr, hosts):
         # Get hosts list by splitting hosts_list 
         hosts = hosts.split("-")
    
+    if (ValidateIPAndCIDR(base_ip, base_cidr) == False):
+        flash("Invalid IP and/or CIDR!", 'error')
+        return redirect('/')
+
     maxHosts = (2 ** (32 - int(base_cidr)))
 
     recalculatedHosts = []
