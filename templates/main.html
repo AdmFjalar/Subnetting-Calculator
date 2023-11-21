@@ -9,7 +9,7 @@
     </head>
     <body>
         <header>
-            <img class="header-icon" src="{{ url_for('static', filename='Icons/SimpleSubnets.png')}}">
+            <a href="{{ url_for('HomeFunc') }}"><img class="header-icon" src="{{ url_for('static', filename='Icons/SimpleSubnets.png')}}"></a>
             <h3>A simple subnet calculator for students</h3>
         </header>
         {% block content_block %}
