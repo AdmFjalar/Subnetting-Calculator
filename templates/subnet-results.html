@@ -32,24 +32,25 @@
       {{2**(32 - base_cidr|int())}} unique addresses, which starts at {{base_ip}} and ends and {{base_broadcast}}. Start creating subnets in the box below.
     </p>
     </div>
-</div> 
-<div class="input_subnet">
-  <h1>Create Subnet</h1>
-  <h3>
-    Enter the number of hosts you require in this subnet:
-  </h3>
-  <form action="{{ url_for('generate_url') }}" method="post">
-        <input type="hidden" value="{{ base_ip }}" id="base_ip" name="base_ip" required>
-        <input type="hidden" value="{{ base_cidr }}" id="base_cidr" name="base_cidr">
-        <input type="hidden" value="{{ actual_hosts|join('-') }}" id="hosts_per_subnet" name="hosts_per_subnet">
-    <fieldset>   
+  </div> 
+  <div class="input_subnet">
+    <h1>Create Subnet</h1>
+    <h3>
+      Enter the number of hosts you require in this subnet:
+    </h3>
+    <form action="{{ url_for('generate_url') }}" method="post">
+      <input type="hidden" value="{{ base_ip }}" id="base_ip" name="base_ip" required>
+      <input type="hidden" value="{{ base_cidr }}" id="base_cidr" name="base_cidr">
+      <input type="hidden" value="{{ actual_hosts|join('-') }}" id="hosts_per_subnet" name="hosts_per_subnet">
+      <fieldset>   
         <input type="number" min="2" max="{{ 2**(32-cidrAvailable) }}" id="hosts" name="hosts" required>
         <label class="hosts-label" for="hosts">Number of Hosts</label> 
-    </fieldset> 
+      </fieldset> 
+      <input class="submit" type="submit" value="Generate Subnet">
+    </form>
+  </div>
 
-    <input class="submit" type="submit" value="Generate Subnet">
-  </form>
-</div>
+  
   <div class="main container chart">
     <div id="BarChart"></div>
   </div>
@@ -100,56 +101,42 @@
     </div>
 
   </div>  
-  {% endblock %}
+{% endblock %}
 
 
-  {% block js_block%}
-    <script src="https://cdn.jsdelivr.net/npm/chartist@1.3.0/dist/index.umd.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/patternomaly@1.3.2/dist/patternomaly.min.js"></script>
+{% block js_block%}
+  <!-- SVG Element -->
+  <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+    <!-- Definition section for patterns -->
+    <defs>
+      <!-- Pattern with diagonal stripes -->
+      <pattern id="diagonal-stripes" patternUnits="userSpaceOnUse" width="40" height="40" patternTransform="rotate(32)">
+        <!-- Diagonal line within the pattern -->
+        <line x1="0" y="0" x2="0" y2="40" stroke="#d9d9d9" stroke-width="55" />
+      </pattern>
+    </defs>
+  </svg>
 
-    <script>
-        var hostsPerSubnet = {{ hostsPerSubnet | tojson }};
-        hostsPerSubnet.push({{ addressesLeft }}); //  ADDS THE ADDRESS-SPACE LEFT
+  <!-- External script reference to Chartist library -->
+  <script src="https://cdn.jsdelivr.net/npm/chartist@1.3.0/dist/index.umd.min.js"></script>
 
-        var subnetColors = {{ subnetColors | tojson }};
-        subnetColors.push('#d3d3d3');             //  ADDS A LIGHT GRAY FOR THE ADDRESS-SPACE LEFT
+  <!-- External script reference to the chart generation script -->
+  <script src="{{ url_for('static', filename='Scripts/chartScript.js') }}"></script>
 
-        var myChart = new Chartist.BarChart(
-        '#BarChart',
-        {
-        series: hostsPerSubnet,
-        backgroundColor: subnetColors,
-      },
-      {
-        horizontalBars: true,
-        stackBars: true,
-        axisX: {
-          showLabel: false,
-          showGrid: false
-        },
-        axisY: {
-          showLabel: false,
-          showGrid: false
-        },
-        barWidth: 50, // Adjust the thickness of the bars
-      }
-    );
+  <script>
+    // Data for the chart
+    var hostsPerSubnet = {{ hostsPerSubnet | tojson }};
+    hostsPerSubnet.push({{ addressesLeft }});
 
+    // Colors for each subnet
+    var subnetColors = {{ subnetColors | tojson }};
+
+    // Create Chartist Bar Chart
+    var myChart = CreateBarChart('#BarChart', hostsPerSubnet, subnetColors);
+
+    // Customize bar drawing logic
     myChart.on('draw', function(data) {
-      if (data.type === 'bar' && data.seriesIndex !== undefined) {
- 
-        var seriesIndex = data.seriesIndex;
-        var currentSeries = myChart.data.series[seriesIndex];
-
-        data.element._node.style.stroke = subnetColors[seriesIndex].toString();
-        data.element._node.style.fill = subnetColors[seriesIndex].toString();
-
-        if (subnetColors[seriesIndex].toString() === "#d3d3d3") {
-          data.element._node.classList.add('ct-bar-last');
-        }
-      }
+      CustomizeBarDrawing(data, hostsPerSubnet, subnetColors);
     });
-
-    </script>
-
+  </script>
 {% endblock %}
