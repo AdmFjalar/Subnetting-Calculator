@@ -52,6 +52,28 @@
     </div>
   {% endif %}
 
+  {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="overlay" id="overlay">
+                        <div class="alert-box">
+                            <h3>{{ message }}</h3>
+                            <span class="close" onclick="closeOverlay();">&times;</span>
+                        </div>
+                    </div>
+                    <script>
+                        document.addEventListener("DOMContentLoaded", function() {
+                            document.getElementById("overlay").style.display = "flex";
+                        });
+    
+                        function closeOverlay() {
+                            document.getElementById("overlay").style.display = "none";
+                        }
+                    </script>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
   
   <div class="main container chart">
     <div id="BarChart"></div>
