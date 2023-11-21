@@ -6,6 +6,7 @@ import colorsys
 subnetColors = []
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'yW]4OU*p41"&~vNUiVj&/{(/FJFL4P="Q%ZrVt+7$~"E8)_Zpr(I?su*acWH^WF'
 
 @app.route('/')
 def HomeFunc():
@@ -29,7 +30,8 @@ def generate_url():
     hostsPerSubnet = request.form.get('hosts_per_subnet', [])
 
     if (ValidateIPAndCIDR(base_ip, base_cidr) == False):
-        return redirect("/")
+        flash("Invalid IP and/or CIDR!", 'error')
+        return redirect('/')
 
     if hostsPerSubnet:
         hostsPerSubnet = [ int(subnetHosts) for subnetHosts in hostsPerSubnet.split("-")]
