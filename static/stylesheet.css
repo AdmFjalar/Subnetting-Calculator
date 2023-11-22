@@ -360,6 +360,10 @@ fieldset {
     margin-right: 5%;
 }
 
+.linkbtn:first-child {
+    margin-left: 0;
+}
+
 /* .ip-cidr-slash {
     display: inline;
     padding: 0;
