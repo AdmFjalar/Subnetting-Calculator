@@ -16,8 +16,13 @@
                  <label class="cidr-label" for="base_cidr">CIDR</label>   
             </div>
             <input class="submit" type="submit" value="Start Subnetting">
+       
         </form>
+        
     </div>
+    <a href="{{ url_for('aboutsubnetsfunc') }}">
+        <button class="button">About Subnets</button>
+    </a>
 </div>
 
 {% with messages = get_flashed_messages(with_categories=true) %}

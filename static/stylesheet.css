@@ -248,7 +248,18 @@ fieldset {
     width: auto;
     height: 100%;
 }
-
+.button{
+    font-family: 'Itim';
+    font-size: 1.75rem;
+    background-color: #FF6B00;
+    padding: 0.5rem;
+    border: solid black 1px;
+    border-radius: 10px;
+    margin: 2%;
+}
+.button:hover {
+    cursor: pointer;
+}
 
 .outputs > .container > * {
     margin-top: 0;
@@ -279,7 +290,9 @@ fieldset {
     
 }
 
-
+.textblock{
+    margin:5%;
+}
 
 .chart {
     padding-top: 1rem;
@@ -340,6 +353,11 @@ fieldset {
     flex-direction: column;
     height: fit-content;
 
+}
+
+.linkbtn{
+    margin-left: 5%;
+    margin-right: 5%;
 }
 
 /* .ip-cidr-slash {

@@ -1,0 +1,42 @@
+{% extends "main.html" %}
+{% block content_block %}
+<div class="main container block">
+    <div class="textblock">
+    <h3>
+        About Subnets
+    </h3>
+    <p>
+        A subnet, or subnetwork, is a network inside a network. Subnets make networks more efficient.
+         Through subnetting, network traffic can travel a shorter distance without passing through 
+         unnecessary routers to reach its destination. We use a <i>subnet mask</i> to divide an IP address 
+         into "network" and "host" portions. This way, network devices can tell that any addresses that share
+         the same network portion are members of the same subnet.
+    </p>
+    <h3>
+        Subnet Masks
+    </h3>
+    <p>
+        A <i>subnet mask</i> is a 32-bit binary number, like the IP address, that accompanies the IP address 
+        and tells the device which parts are the network address and which parts are the host address. The first part of
+        the subnet mask, represented as 1s in binary, identifies the "network" part of an address, and the remaining bits,
+        represented as 0s, identify the "host" part of an address.
+    </p>
+    <h3>
+        CIDR notation
+    </h3>
+    <p>
+        A subnet mask is a 32-bit binary number like an IP address, and is represented in dotted-decimal notation
+         as a series of 4 octets, just like an IP address. This is the subnet mask you enter into your devices. However
+         an easy shorthand for a subnet mask is the <i>CIDR notation</i>. This is the number slash and number that follows
+         an IP address. The CIDR notation simply notes how many of the binary digits are reserved for the network, and the remainder
+         of the 32 digits are usable for hosts. For instance, a /22 network will have 22 bits of the IP address reserved for 
+         the network address, and the remaining 10 bits available for forming unique host addresses. Therefore, the larger the 
+         CIDR number is, the less digits are available for the hosts and the smaller the subnet will be.
+         We can determine the number of hosts possible by raising 2 to the power of the number of host bits. For example,
+         a /22 network has (32-22=10) 10 host bits available, and 2^10 is 1024, therefore a /22 network can accomidate 1024 unique hosts.
+    </p></div>
+    <button onclick="history.back()" class="button">
+        Back
+        </button>
+ </div>
+{% endblock %}

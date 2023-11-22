@@ -17,6 +17,11 @@
         {% endblock %}
         <footer>
             <p>Copyright © 2023 Dylan Green, Oliver Grönkrans, Thomas Morrison</p>
+            <div class="container">
+            <a href="{{ url_for('aboutappfunc') }}" class="linkbtn">About this app</a>
+            
+            <a href="{{ url_for('aboutsubnetsfunc') }}" class="">About Subnets</a>
+            </div>
         </footer>
         {% block js_block %}
     

@@ -19,9 +19,7 @@ def HomeFunc():
     # Pass the data to the template
     return render_template("index.html", network_address=network_address, cidr=cidr)
 
-@app.route('/about')
-def AboutFunc():
-    return render_template("About")
+
 
 @app.route('/generate_url', methods=['POST'])
 def generate_url():
@@ -122,21 +120,16 @@ def show_subnet(base_ip, base_cidr, hosts):
                           base_broadcast=base_broadcast,
                           actual_hosts=hosts)
 
-#Route to subnet-input child
-@app.route('/subnet/<base_ip>/<base_cidr>/<hosts>/input')
-def show_input():
-    return render_template('subnet-input-extend.html')
+#Route to aboutapp child
+@app.route('/aboutapp')
+def aboutappfunc():
+    return render_template("aboutapp.html")
 
-#Route to the subnet-output child
-@app.route('/subnet/<base_ip>/<base_cidr>/<hosts>/output')
-def show_output(base_ip,base_cidr,hostsPerSubnet):
-    # Call subnetter functions to generate subnets    
-    generatedSubnets = CalculateSubnets(base_ip, base_cidr, hostsPerSubnet)
-   
-    numberOfSubnets = len(generatedSubnets)
-    return render_template('subnet-output-extend.html',
-                    generatedSubnets=generatedSubnets,
-                    numberOfSubnets=numberOfSubnets)
+#Route to aboutSubnet child
+@app.route('/aboutsubnets')
+def aboutsubnetsfunc():
+    return render_template("aboutsubnets.html")
+
 
 if __name__ == "__main__":
     app.run(debug=True)
