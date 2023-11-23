@@ -9,7 +9,7 @@
     </head>
     <body>
         <header>
-            <a href="{{ url_for('HomeFunc') }}"><img class="header-icon" src="{{ url_for('static', filename='Icons/SimpleSubnets.png')}}"></a>
+            <a href="{{ url_for('Index') }}"><img class="header-icon" src="{{ url_for('static', filename='Icons/SimpleSubnets.png')}}"></a>
             <h3>A simple subnet calculator for students</h3>
         </header>
         {% block content_block %}
@@ -18,9 +18,9 @@
         <footer>
             <p>Copyright © 2023 Dylan Green, Oliver Grönkrans, Thomas Morrison</p>
             <div class="container">
-            <a href="{{ url_for('aboutappfunc') }}" class="linkbtn">About this app</a>
+            <a href="{{ url_for('AboutApp') }}" class="linkbtn">About this app</a>
             
-            <a href="{{ url_for('aboutsubnetsfunc') }}" class="">About Subnets</a>
+            <a href="{{ url_for('AboutSubnets') }}" class="">About Subnets</a>
             </div>
         </footer>
         {% block js_block %}

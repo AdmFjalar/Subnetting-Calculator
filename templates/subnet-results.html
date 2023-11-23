@@ -5,7 +5,7 @@
         <p>To get started, enter the block of IP addresses you want to subnet. First enter the network ID and then it's CIDR notation, eg 192.168.0.0/24</p>
       </div>
       <div class="container">
-        <form action="{{ url_for('generate_url') }}" method="post">
+        <form action="{{ url_for('GenerateURL') }}" method="post">
             <div class="input-group">
                 <input readonly type="text" value="{{ base_ip }}" id="base_ip" name="base_ip" required>
                 <h1 class="ip-cidr-slash">/</h1>
@@ -42,7 +42,7 @@
        re-ordered and given new first and last IPs.<br>      <br>
        You can enter any number of required host address (for both devices and router ports) and the calculator will create the nearest subnet that is large enough 
        to accomidate this number. Remember two addresses must be reserved for the ID and Broadcast IPS. 
-      <form action="{{ url_for('generate_url') }}" method="post">
+      <form action="{{ url_for('GenerateURL') }}" method="post">
         <input type="hidden" value="{{ base_ip }}" id="base_ip" name="base_ip" required>
         <input type="hidden" value="{{ base_cidr }}" id="base_cidr" name="base_cidr">
         <input type="hidden" value="{{ actual_hosts|join('-') }}" id="hosts_per_subnet" name="hosts_per_subnet">

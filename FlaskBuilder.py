@@ -9,28 +9,28 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yW]4OU*p41"&~vNUiVj&/{(/FJFL4P="Q%ZrVt+7$~"E8)_Zpr(I?su*acWH^WF'
 
 @app.route('/')
-def HomeFunc():
+def Index():
     # Define the data you want to pass to the template
-    network_address = "192.168.0.0"
+    networkAddress = "192.168.0.0"
     cidr = 24
 
     subnetColors.clear()
 
     # Pass the data to the template
-    return render_template("index.html", network_address=network_address, cidr=cidr)
+    return render_template("index.html", network_address=networkAddress, cidr=cidr)
 
 
 
 # Flask route for handling POST requests to generate a URL
 @app.route('/generate_url', methods=['POST'])
-def generate_url():
+def GenerateURL():
     # Extracting data from the form submitted via POST
-    base_ip = request.form['base_ip']
-    base_cidr = int(request.form['base_cidr'])
+    baseIP = request.form['base_ip']
+    baseCIDR = int(request.form['base_cidr'])
     hostsPerSubnet = request.form.get('hosts_per_subnet', [])
 
     # Validate the provided IP and CIDR
-    if not ValidateIPAndCIDR(base_ip, base_cidr):
+    if not ValidateIPAndCIDR(baseIP, baseCIDR):
         flash("Invalid IP and/or CIDR!", 'error')
         return redirect('/')
 
@@ -46,7 +46,7 @@ def generate_url():
     hosts = int(request.form.get('hosts', 0))
 
     # Calculate the maximum number of hosts for the given CIDR
-    maxHosts = 2 ** (32 - base_cidr)
+    maxHosts = 2 ** (32 - baseCIDR)
 
     # Initialize a variable to track the hosts list for URL generation
     hostsList = "new"
@@ -77,7 +77,7 @@ def generate_url():
         hostsList = "-".join([str(item) for item in hostsPerSubnet])
 
     # Generate the URL based on the provided parameters
-    url = f"/subnet/{base_ip}/{base_cidr}/{hostsList}"
+    url = f"/subnet/{baseIP}/{baseCIDR}/{hostsList}"
 
     # Redirect the user to the generated URL
     return redirect(url)
@@ -85,8 +85,8 @@ def generate_url():
 
 
 # Flask route for displaying subnet information based on user input
-@app.route('/subnet/<base_ip>/<base_cidr>/<hosts>')
-def show_subnet(base_ip, base_cidr, hosts):
+@app.route('/subnet/<baseIP>/<baseCIDR>/<hosts>')
+def ShowSubnet(baseIP, baseCIDR, hosts):
     # Check if the hosts parameter is set to "new" and handle it accordingly
     if hosts == "new":
         hosts = []
@@ -95,12 +95,12 @@ def show_subnet(base_ip, base_cidr, hosts):
         hosts = hosts.split("-")
 
     # Validate the provided IP and CIDR
-    if not ValidateIPAndCIDR(base_ip, base_cidr):
+    if not ValidateIPAndCIDR(baseIP, baseCIDR):
         flash("Invalid IP and/or CIDR!", 'error')
         return redirect('/')
 
     # Calculate the maximum number of hosts for the given CIDR
-    maxHosts = 2 ** (32 - int(base_cidr))
+    maxHosts = 2 ** (32 - int(baseCIDR))
 
     # Initialize an empty list for recalculated hosts
     recalculatedHosts = []
@@ -114,7 +114,7 @@ def show_subnet(base_ip, base_cidr, hosts):
             subnetColors.append('#' + '%06x' % random.randint(0, 0xFFFFFF))
 
     # Call subnetter functions to generate subnets
-    generatedSubnets = CalculateSubnets(base_ip, base_cidr, recalculatedHosts)
+    generatedSubnets = CalculateSubnets(baseIP, baseCIDR, recalculatedHosts)
 
     # Get the number of generated subnets
     numberOfSubnets = len(generatedSubnets)
@@ -129,7 +129,7 @@ def show_subnet(base_ip, base_cidr, hosts):
             recalculatedHosts.pop()
             addressesLeft = maxHosts - sum(recalculatedHosts)
         hostsList = "-".join([str(item) for item in recalculatedHosts])
-        url = f"/subnet/{base_ip}/{base_cidr}/{hostsList}"
+        url = f"/subnet/{baseIP}/{baseCIDR}/{hostsList}"
         return redirect(url)
 
     # Initialize CIDR available to the default value of 32
@@ -143,32 +143,32 @@ def show_subnet(base_ip, base_cidr, hosts):
             cidrAvailable = 32 - math.floor(math.log2(int(addressesLeft)))
 
     # Calculate base network object and extract base broadcast address
-    baseNetwork = CalculateNetwork(base_ip, base_cidr)
-    base_broadcast = baseNetwork.broadcast_address
+    baseNetwork = CalculateNetwork(baseIP, baseCIDR)
+    baseBroadcast = baseNetwork.broadcast_address
 
     # Render the template with the calculated subnet information
     return render_template('subnet-results.html',
-                           base_ip=base_ip,
-                           base_cidr=base_cidr,
+                           base_ip=baseIP,
+                           base_cidr=baseCIDR,
                            generatedSubnets=generatedSubnets,
                            numberOfSubnets=numberOfSubnets,
                            addressesLeft=addressesLeft,
                            cidrAvailable=cidrAvailable,
                            subnetColors=subnetColors,
                            hostsPerSubnet=recalculatedHosts,
-                           base_broadcast=base_broadcast,
+                           base_broadcast=baseBroadcast,
                            actual_hosts=hosts)
 
 
 
 #Route to aboutapp child
 @app.route('/aboutapp')
-def aboutappfunc():
+def AboutApp():
     return render_template("aboutapp.html")
 
 #Route to aboutSubnet child
 @app.route('/aboutsubnets')
-def aboutsubnetsfunc():
+def AboutSubnets():
     return render_template("aboutsubnets.html")
 
 
